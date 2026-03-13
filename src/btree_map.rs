@@ -6,7 +6,7 @@ macro_rules! btree_map {
     ($($key: expr => $value: expr),*) => {{
         #[allow(unused_mut)]
         let mut btm = BTreeMap::new();
-        $(btm.insert($key, $value);)*
+        $(btm.entry($key).or_insert($value);)*
         btm
     }};
     // trailing comma case
