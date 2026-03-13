@@ -1,5 +1,5 @@
 [package]
-name = "macro_rules"
+name = "playground_macro_rules"
 version = "0.1.0"
 edition = "2024"
 
