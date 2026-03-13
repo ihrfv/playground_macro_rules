@@ -7,16 +7,17 @@ macro_rules! hash_map {
         const COUNT: usize = $crate::count![$($key),*];
         #[allow(unused_mut)]
         let mut hm = HashMap::with_capacity(COUNT);
-        $(hm.entry($key).or_insert($value);)*
+        $(let _ = hm.entry($key).or_insert($value);)*
         hm
     }};
+    // trailing comma case
     ($($key: expr => $value: expr,)*) => {{
         $crate::hash_map!($($key => $value),*)
     }};
 }
 
 #[test]
-fn empty_hash_map() {
+fn empty() {
     let hm: HashMap<(), ()> = hash_map![];
     assert!(hm.is_empty());
 }
@@ -25,7 +26,7 @@ fn empty_hash_map() {
 fn single_pair() {
     let team: &'static str = "blue";
     let score = 64;
-    let hm: HashMap<String, usize> = hash_map![team.to_string() => score];
+    let hm = hash_map![team => score];
     assert_eq!(hm.len(), 1);
     assert_eq!(hm[team], score);
 }
@@ -36,9 +37,9 @@ fn double_pair() {
     let score1 = 64;
     let team2: &'static str = "black";
     let score2 = 66;
-    let hm: HashMap<String, usize> = hash_map![
-    team1.to_string() => score1,
-    team2.to_string() => score2
+    let hm = hash_map![
+    team1 => score1,
+    team2 => score2
     ];
     assert_eq!(hm.len(), 2);
     assert_eq!(hm[team1], score1);
@@ -48,10 +49,10 @@ fn double_pair() {
 #[test]
 fn trailing() {
     let _ = hash_map![
-    "team1".to_string() => 65,
-    "team2".to_string() => 123,
-    "team3".to_string() => 1,
-    "team4".to_string() => 15,
+    "team1" => 65,
+    "team2" => 123,
+    "team3" => 1,
+    "team4" => 15,
     ];
 }
 
@@ -61,10 +62,10 @@ fn reapeated_no_overwrite() {
     let score1 = 64;
     let team2: &'static str = "black";
     let score2 = 66;
-    let hm: HashMap<String, usize> = hash_map![
-    team1.to_string() => score1,
-    team2.to_string() => score2,
-    team1.to_string() => score2
+    let hm = hash_map![
+    team1 => score1,
+    team2 => score2,
+    team1 => score2
     ];
     assert_eq!(hm.len(), 2);
     assert_eq!(hm[team1], score1);
