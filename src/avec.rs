@@ -10,24 +10,13 @@ macro_rules! avec {
     ($($element:expr,)*) => {{
         crate::avec![$($element),*]
     }};
-    
+
     ($element: expr; $count: expr) => {{
         let count = $count;
         let mut v = Vec::with_capacity(count);
         v.resize(count, $element);
         v
     }}
-}
-
-#[macro_export]
-#[doc(hidden)]
-macro_rules! count {
-    ($($element:expr),*) => {
-        <[()]>::len(&[$(crate::count!(@SUBST; $element)),*])
-    };
-    (@SUBST; $_element:expr) => {
-        ()
-    };
 }
 
 #[test]
